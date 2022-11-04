@@ -1,5 +1,6 @@
 import ballerina/http;
 import ballerina/os;
+import ballerina/log;
 
 final string k8sApiServerUrl = os:getEnv("K8S_API_SERVER_URL");
 final string k8sApiToken = os:getEnv("K8S_SERVICE_TOKEN");
@@ -34,7 +35,8 @@ isolated function getServicesListFromK8s(string namespace) returns ServiceList|e
             list: serviceNames
         };
         return serviceList;
+    } else {
+        log:printError(serviceResp.message());
     }
-    return error("error while retrieving service list from K8s API server for namespace : " + 
-                namespace);
+    return error("error while retrieving service list from K8s API server for namespace : " + namespace);
 }
